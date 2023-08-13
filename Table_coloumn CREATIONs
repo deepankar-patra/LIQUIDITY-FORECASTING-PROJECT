@@ -1,0 +1,38 @@
+DATEBASE -LIQUIDITY FORECASTING
+
+CREATE TABLE account (
+account_id VARCHAR(20) PRIMARY KEY,
+Account_no INT NOT NULL,
+BANK VARCHAR (50) NOT NULL
+--other related columns
+);
+CREATE TABLE Expenses (
+expense_id INT PRIMARY KEY,
+account_id VARCHAR(20),
+category_id INT,
+amount DECIMAL (10,2),
+date DATE
+--other related columns
+);
+CREATE TABLE Income (
+income_id INT PRIMARY KEY,
+account_id VARCHAR(20),
+category_id INT,
+amount DECIMAL (10,2),
+date DATE
+--other related columns
+);
+CREATE TABLE Categories (
+category_id INT PRIMARY KEY,
+remark VARCHAR (100) NOT NULL
+--other related columns
+);
+CREATE TABLE Budgets (
+budget_id INT PRIMARY KEY,
+account_id INT,
+category_id INT,
+amount DECIMAL (10,2),
+start_date DATE,
+end_date DATE
+--other related columns
+);
