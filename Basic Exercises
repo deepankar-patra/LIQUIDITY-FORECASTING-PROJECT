@@ -53,13 +53,6 @@ GROUP BY c.remark
 ORDER BY average_income DESC
 LIMIT 1;
 
---Calculate the budget utilization percentage for each account and category.
-SELECT b.account_id, c.remark, ROUND((SUM(e.amount) / b.amount * 100),2) AS utilization_percentage
-FROM Budgets b
-JOIN Categories c ON b.category_id = c.category_id
-LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
-GROUP BY b.account_id, c.remark, b.amount;
-
 --List the account numbers and their corresponding average income for accounts that have an average income greater than 5000.
 
 SELECT a.Account_no, ROUND(AVG(i.amount),2) AS average_income
