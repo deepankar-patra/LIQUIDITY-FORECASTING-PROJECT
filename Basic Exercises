@@ -15,3 +15,59 @@ instead we have spend for the expenses, so we will find out the average expenses
 SELECT ROUND(AVG(amount),2) AS avg_expense
 FROM Expenses
 WHERE account_id = 'KOTAK123' AND date BETWEEN '2023-08-01' AND '2023-08-31';
+
+-- Calculate average income for account 'KOTAK123' during August 2023
+SELECT ROUND(AVG(amount),2) AS avg_income
+FROM Income
+WHERE account_id = 'KOTAK123' AND date BETWEEN '2023-08-01' AND '2023-08-31';
+
+As a result avg_income will generate null because there are no income for account 'KOTAK123',
+instead we have spend for the expenses we will find out the average expenses during August 2023.
+
+SELECT ROUND(AVG(amount),2) AS avg_expense
+FROM Expenses
+WHERE account_id = 'KOTAK123' AND date BETWEEN '2023-08-01' AND '2023-08-31';
+
+
+
+--LIST the account numbers and bank names for all accounts.
+SELECT Account_no, BANK
+FROM account;
+
+--List all income categories.
+SELECT *
+FROM Categories
+WHERE remark LIKE '%income%';
+
+--Calculate the total amount of expenses for each account in August 2023.
+SELECT account_id, SUM(amount) AS total_expenses
+FROM Expenses
+WHERE date BETWEEN '2023-08-01' AND '2023-08-31'
+GROUP BY account_id;
+
+--Find the category with the highest average income.
+SELECT c.remark, ROUND(AVG(i.amount),2) AS average_income
+FROM Income i
+JOIN Categories c ON i.category_id = c.category_id
+GROUP BY c.remark
+ORDER BY average_income DESC
+LIMIT 1;
+
+--Calculate the budget utilization percentage for each account and category.
+SELECT b.account_id, c.remark, ROUND((SUM(e.amount) / b.amount * 100),2) AS utilization_percentage
+FROM Budgets b
+JOIN Categories c ON b.category_id = c.category_id
+LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
+GROUP BY b.account_id, c.remark, b.amount;
+
+--List the account numbers and their corresponding average income for accounts that have an average income greater than 5000.
+
+SELECT a.Account_no, ROUND(AVG(i.amount),2) AS average_income
+FROM account a
+JOIN Income i ON a.account_id = i.account_id
+GROUP BY a.Account_no
+HAVING AVG(i.amount) > 5000;
+
+
+
+
