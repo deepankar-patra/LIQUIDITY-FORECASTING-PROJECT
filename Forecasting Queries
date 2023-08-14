@@ -1,0 +1,40 @@
+--Find the total budgeted amount for each category.
+SELECT category_id, SUM(amount) AS total_budgeted_amount
+FROM Budgets
+GROUP BY category_id;
+
+--List all accounts along with their allocated budget for each category.
+SELECT b.account_id, SUM(b.amount) AS total_budgeted_amount, SUM(e.amount) AS total_actual_expenses
+FROM Budgets b
+LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
+GROUP BY b.account_id;
+
+
+--Calculate the budget utilization percentage for each account and category.
+SELECT b.account_id, c.remark, ROUND((SUM(e.amount) / b.amount * 100),2) AS utilization_percentage
+FROM Budgets b
+JOIN Categories c ON b.category_id = c.category_id
+LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
+GROUP BY b.account_id, c.remark, b.amount;
+
+
+--Find the accounts that have exceeded their budget for at least one category.
+SELECT b.account_id, c.remark, b.amount AS budget_amount, SUM(e.amount) AS total_expenses
+FROM Budgets b
+JOIN Categories c ON b.category_id = c.category_id
+LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
+GROUP BY b.account_id, c.remark, b.amount
+HAVING SUM(e.amount) > b.amount;
+
+--Determine the categories for which no budget has been allocated.
+SELECT c.remark
+FROM Categories c
+LEFT JOIN Budgets b ON c.category_id = b.category_id
+WHERE b.category_id IS NULL;
+
+
+--Calculate the total budgeted amount and total actual expenses for each account.
+SELECT b.account_id, SUM(b.amount) AS total_budgeted_amount, SUM(e.amount) AS total_actual_expenses
+FROM Budgets b
+LEFT JOIN Expenses e ON b.account_id = e.account_id AND b.category_id = e.category_id
+GROUP BY b.account_id;
